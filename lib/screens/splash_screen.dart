@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_abans/screens/auth_screen.dart';
+import 'package:my_abans/utils/custom_colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -9,9 +11,20 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => AuthScreen()),
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF7a1f7f),
+      backgroundColor: CustomColors.primaryColor,
       body: Center(
         child: Image.asset('assets/images/abansLogo.jpeg', width: 300),
       ),
