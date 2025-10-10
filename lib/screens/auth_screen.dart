@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_abans/components/custom_button.dart';
 import 'package:my_abans/components/custom_text_field.dart';
+import 'package:my_abans/screens/home_page.dart';
+import 'package:my_abans/utils/navigation_manager.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -70,6 +72,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     ? 'Sign In'
                     : 'Send Password reset Email',
                 onTap: () {
+                  NavigationManager.goTo(context, HomePage());
                   setState(() {
                     if (authScreenType == 'signup') {
                       //signup

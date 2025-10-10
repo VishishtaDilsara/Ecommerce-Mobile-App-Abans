@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_abans/screens/auth_screen.dart';
 import 'package:my_abans/utils/custom_colors.dart';
+import 'package:my_abans/utils/navigation_manager.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,10 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => AuthScreen()),
-      );
+      NavigationManager.goWithReplace(context, AuthScreen());
     });
   }
 
