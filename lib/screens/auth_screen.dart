@@ -88,10 +88,9 @@ class _AuthScreenState extends State<AuthScreen> {
                           ? 'Sign In'
                           : 'Send Password reset Email',
                       onTap: () {
-                        NavigationManager.goTo(context, HomePage());
                         setState(() {
                           if (authScreenType == 'signup') {
-                            authProvider.signupUser();
+                            authProvider.signupUser(context);
                           } else if (authScreenType == 'signin') {
                             //signin
                           } else {

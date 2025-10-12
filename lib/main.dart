@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:my_abans/providers/auth_state_provider.dart';
 import 'package:my_abans/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
+      builder: EasyLoading.init(),
       home: SplashScreen(),
     );
   }

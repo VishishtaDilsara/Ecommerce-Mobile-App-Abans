@@ -39,6 +39,7 @@ dependencies:
   firebase_auth: ^6.1.0
   logger: ^2.6.2
   provider: ^6.1.5+1
+  flutter_easyloading: ^3.0.5
 
 dev_dependencies:
   flutter_test:

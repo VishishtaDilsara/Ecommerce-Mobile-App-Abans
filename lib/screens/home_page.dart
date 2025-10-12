@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_abans/controllers/auth_controller.dart';
 import 'package:my_abans/utils/custom_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -45,7 +46,9 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Image.asset('assets/images/text_logo.png', height: 25),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        AuthController().signOut();
+                      },
 
                       icon: Icon(Icons.more_vert_rounded, size: 25),
                     ),

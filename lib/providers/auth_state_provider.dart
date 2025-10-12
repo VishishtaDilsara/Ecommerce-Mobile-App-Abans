@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:logger/web.dart';
 import 'package:my_abans/controllers/auth_controller.dart';
+import 'package:my_abans/utils/custom_dialogs.dart';
 
 class AuthStateProvider extends ChangeNotifier {
   final TextEditingController _emailController = TextEditingController();
@@ -14,19 +16,25 @@ class AuthStateProvider extends ChangeNotifier {
   TextEditingController get confirmPasswordController =>
       _confirmPasswordController;
 
-  Future<void> signupUser() async {
+  Future<void> signupUser(BuildContext context) async {
     if (_emailController.text.trim().length < 3) {
-      Logger().e('Email is too short');
+      CustomDialogs.showErrorSnackBar(context, 'Email is too short');
     } else if (_passwordController.text.trim().length < 6) {
-      Logger().e('Password is too short');
+      CustomDialogs.showErrorSnackBar(context, 'Password is too short');
     } else if (_passwordController.text.trim() !=
         _confirmPasswordController.text.trim()) {
-      Logger().e('Password and Confirm Password do not match');
+      CustomDialogs.showErrorSnackBar(
+        context,
+        'Password and Confirm Password do not match',
+      );
     } else {
+      EasyLoading.show();
       final user = await AuthController().createUserAccount(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
+        context: context,
       );
+      EasyLoading.dismiss();
       Logger().i('User Created');
     }
   }
