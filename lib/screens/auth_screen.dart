@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_abans/components/custom_button.dart';
 import 'package:my_abans/components/custom_text_field.dart';
 import 'package:my_abans/providers/auth_state_provider.dart';
-import 'package:my_abans/screens/home_page.dart';
-import 'package:my_abans/utils/navigation_manager.dart';
 import 'package:provider/provider.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -51,6 +49,11 @@ class _AuthScreenState extends State<AuthScreen> {
                       style: TextStyle(color: Colors.grey.shade600),
                     ),
                     SizedBox(height: 40),
+                    if (authScreenType == 'signup')
+                      CustomTextField(
+                        controller: authProvider.nameController,
+                        label: 'Name',
+                      ),
                     CustomTextField(
                       controller: authProvider.emailController,
                       label: 'Email Address',
@@ -92,7 +95,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           if (authScreenType == 'signup') {
                             authProvider.signupUser(context);
                           } else if (authScreenType == 'signin') {
-                            //signin
+                            authProvider.signInUser(context);
                           } else {
                             //forgot
                           }
