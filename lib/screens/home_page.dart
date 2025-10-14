@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_abans/controllers/auth_controller.dart';
 import 'package:my_abans/providers/user_provider.dart';
+import 'package:my_abans/screens/admin/product_add_screen.dart';
 import 'package:my_abans/utils/custom_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:my_abans/utils/navigation_manager.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,7 +38,9 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            NavigationManager.goTo(context, ProductAddScreen());
+                          },
                           style: ButtonStyle(
                             backgroundColor: WidgetStatePropertyAll(
                               CustomColors.primaryColor,

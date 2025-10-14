@@ -4,12 +4,22 @@ class CustomTextField extends StatefulWidget {
   final String label;
   final TextEditingController? controller;
   final bool isPassword;
+  final int? maxLines;
+  final int? minLines;
+  final int? maxLength;
+  final TextInputType? keyboardType;
+  final String? prefixText;
 
   const CustomTextField({
     super.key,
     required this.label,
     this.controller,
     this.isPassword = false,
+    this.maxLines,
+    this.minLines,
+    this.maxLength,
+    this.keyboardType,
+    this.prefixText,
   });
 
   @override
@@ -28,6 +38,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
           Text(widget.label),
           SizedBox(height: 5),
           TextField(
+            keyboardType: widget.keyboardType,
+            maxLength: widget.maxLength,
+            maxLines: widget.maxLines,
+            minLines: widget.minLines,
             controller: widget.controller,
             obscureText: isObscureText && widget.isPassword,
 
@@ -46,6 +60,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               ),
               fillColor: Colors.grey.shade100,
               filled: true,
+              prefixText: widget.prefixText,
               suffixIcon: widget.isPassword
                   ? IconButton(
                       onPressed: () {
