@@ -1,8 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_abans/controllers/product_controller.dart';
+import 'package:my_abans/controllers/storage_controller.dart';
+import 'package:my_abans/models/product_model.dart';
+import 'package:my_abans/utils/custom_dialogs.dart';
+import 'package:uuid/uuid.dart';
 
 class ProductAddProvider extends ChangeNotifier {
   final TextEditingController _productNameController = TextEditingController();
@@ -53,5 +59,69 @@ class ProductAddProvider extends ChangeNotifier {
   void removeImage(File image) {
     _pickedImages.remove(image);
     notifyListeners();
+  }
+
+  void clearStates() {
+    _productNameController.clear();
+    _descriptionController.clear();
+    _priceController.clear();
+    _selectedCategoryId = null;
+    _pickedImages.clear();
+    notifyListeners();
+  }
+
+  Future<void> publishProduct(BuildContext context) async {
+    if (_productNameController.text.trim().isEmpty) {
+      CustomDialogs.showErrorSnackBar(context, 'Please Add Product Name');
+    } else if (_descriptionController.text.trim().isEmpty) {
+      CustomDialogs.showErrorSnackBar(
+        context,
+        'Please Add Product Description',
+      );
+    } else if (_selectedCategoryId == null) {
+      CustomDialogs.showErrorSnackBar(
+        context,
+        'Please Select Product Category',
+      );
+    } else if (_priceController.text.trim().isEmpty) {
+      CustomDialogs.showErrorSnackBar(context, 'Please Add Product Prize');
+    } else if (_pickedImages.isEmpty) {
+      CustomDialogs.showErrorSnackBar(context, 'Please Add atleast one image');
+    } else {
+      List<String> imageUrls = [];
+      EasyLoading.show();
+
+      for (var file in _pickedImages) {
+        final imageUrl = await StorageController().uploadFile(
+          file,
+          'Product Images',
+        );
+        if (imageUrl != null) {
+          imageUrls.add(imageUrl);
+        }
+      }
+      final product = ProductModel(
+        id: Uuid().v4(),
+        categoryId: _selectedCategoryId!,
+        description: _descriptionController.text.trim(),
+        images: imageUrls,
+        name: _productNameController.text.trim(),
+        price: double.parse(_priceController.text.trim()),
+      );
+      final isSuccess = await ProductController().publishProduct(product);
+      if (isSuccess) {
+        clearStates();
+        CustomDialogs.showSuccessSnackBar(
+          context,
+          'Product Publish Successfull',
+        );
+      } else {
+        CustomDialogs.showErrorSnackBar(
+          context,
+          'Product Image Publish Failed',
+        );
+      }
+      EasyLoading.dismiss();
+    }
   }
 }

@@ -148,7 +148,12 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SafeArea(
-                  child: CustomButton(text: 'Publish Product', onTap: () {}),
+                  child: CustomButton(
+                    text: 'Publish Product',
+                    onTap: () {
+                      productAddProvider.publishProduct(context);
+                    },
+                  ),
                 ),
               ),
             ],
