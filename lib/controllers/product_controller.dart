@@ -16,4 +16,19 @@ class ProductController {
       return false;
     }
   }
+
+  Future<List<ProductModel>> fetchProducts() async {
+    try {
+      final data = await productCollection.get();
+      final productData = data.docs;
+      return productData
+          .map(
+            (doc) => ProductModel.fromJson(doc.data() as Map<String, dynamic>),
+          )
+          .toList();
+    } catch (e) {
+      Logger().e(e);
+      return [];
+    }
+  }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:my_abans/providers/auth_state_provider.dart';
 import 'package:my_abans/providers/product_add_provider.dart';
+import 'package:my_abans/providers/product_provider.dart';
 import 'package:my_abans/providers/user_provider.dart';
 import 'package:my_abans/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +18,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => AuthStateProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => ProductAddProvider()),
+        ChangeNotifierProvider(create: (context) => ProductProvider()),
       ],
       child: MyApp(),
     ),
