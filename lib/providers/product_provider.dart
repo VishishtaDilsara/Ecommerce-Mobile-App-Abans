@@ -6,6 +6,9 @@ class ProductProvider extends ChangeNotifier {
   List<ProductModel> _products = [];
   List<ProductModel> get products => _products;
 
+  ProductModel? _selectedProduct;
+  ProductModel? get selectedProduct => _selectedProduct;
+
   bool _isProductFetched = false;
   bool get isProductFetched => _isProductFetched;
 
@@ -15,5 +18,10 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
 
     return _products;
+  }
+
+  void setSelectedProduct(ProductModel product) {
+    _selectedProduct = product;
+    notifyListeners();
   }
 }

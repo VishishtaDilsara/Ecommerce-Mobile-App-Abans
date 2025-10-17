@@ -5,6 +5,7 @@ import 'package:my_abans/models/product_model.dart';
 import 'package:my_abans/providers/product_provider.dart';
 import 'package:my_abans/providers/user_provider.dart';
 import 'package:my_abans/screens/admin/product_add_screen.dart';
+import 'package:my_abans/screens/product_view_screen.dart';
 import 'package:my_abans/utils/custom_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:my_abans/utils/navigation_manager.dart';
@@ -33,8 +34,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserProvider>(
-      builder: (context, userProvider, child) {
+    return Consumer2<UserProvider, ProductProvider>(
+      builder: (context, userProvider, productProvider, child) {
         return Scaffold(
           backgroundColor: Colors.white,
           body: Padding(
@@ -204,47 +205,56 @@ class _HomePageState extends State<HomePage> {
                               ),
                           itemBuilder: (context, index) {
                             final product = products[index];
-                            return Container(
-                              padding: EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    height: 200,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                        image: NetworkImage(
-                                          product.images.first,
+                            return GestureDetector(
+                              onTap: () {
+                                productProvider.setSelectedProduct(product);
+                                NavigationManager.goTo(
+                                  context,
+                                  ProductViewScreen(),
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade100,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: double.infinity,
+                                      height: 200,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius: BorderRadius.circular(20),
+                                        image: DecorationImage(
+                                          image: NetworkImage(
+                                            product.images.first,
+                                          ),
+                                          fit: BoxFit.cover,
                                         ),
-                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    product.name,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
+                                    SizedBox(height: 4),
+                                    Text(
+                                      product.name,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                    'LKR ${product.price.toInt()}',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: CustomColors.primaryColor,
-                                      fontSize: 18,
+                                    Text(
+                                      'LKR ${product.price.toInt()}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: CustomColors.primaryColor,
+                                        fontSize: 18,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             );
                           },
