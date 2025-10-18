@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:my_abans/providers/auth_state_provider.dart';
+import 'package:my_abans/providers/cart_provider.dart';
 import 'package:my_abans/providers/product_add_provider.dart';
 import 'package:my_abans/providers/product_provider.dart';
 import 'package:my_abans/providers/user_provider.dart';
@@ -19,6 +20,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => ProductAddProvider()),
         ChangeNotifierProvider(create: (context) => ProductProvider()),
+        ChangeNotifierProvider(create: (context) => CartProvider()),
       ],
       child: MyApp(),
     ),

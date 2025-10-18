@@ -12,6 +12,9 @@ class ProductProvider extends ChangeNotifier {
   bool _isProductFetched = false;
   bool get isProductFetched => _isProductFetched;
 
+  int _selectedProductQuantity = 1;
+  int get selectedProductQuantity => _selectedProductQuantity;
+
   Future<List<ProductModel>> fetchProducts() async {
     _products = await ProductController().fetchProducts();
     _isProductFetched = true;
@@ -22,6 +25,19 @@ class ProductProvider extends ChangeNotifier {
 
   void setSelectedProduct(ProductModel product) {
     _selectedProduct = product;
+    _selectedProductQuantity = 1;
     notifyListeners();
+  }
+
+  void incrementProductQuantity() {
+    _selectedProductQuantity++;
+    notifyListeners();
+  }
+
+  void decrementProductQuantity() {
+    if (_selectedProductQuantity > 1) {
+      _selectedProductQuantity--;
+      notifyListeners();
+    }
   }
 }

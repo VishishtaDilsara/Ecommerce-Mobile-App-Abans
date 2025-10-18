@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:my_abans/components/custom_button.dart';
 import 'package:my_abans/data/categories.dart';
+import 'package:my_abans/models/cart_model.dart';
+import 'package:my_abans/providers/cart_provider.dart';
 import 'package:my_abans/providers/product_provider.dart';
+import 'package:my_abans/screens/cart_view.dart';
 import 'package:my_abans/utils/custom_colors.dart';
+import 'package:my_abans/utils/navigation_manager.dart';
 import 'package:provider/provider.dart';
 
 class ProductViewScreen extends StatefulWidget {
@@ -22,6 +27,7 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
         final product = productProvider.selectedProduct;
         return Scaffold(
           backgroundColor: Colors.white,
+
           body: Column(
             children: [
               SizedBox(
@@ -91,6 +97,40 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
                         ),
                       ),
                     ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Consumer<CartProvider>(
+                        builder: (context, cartProvider, child) {
+                          return cartProvider.cartItems.isNotEmpty
+                              ? SafeArea(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      NavigationManager.goTo(
+                                        context,
+                                        CartView(),
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                      ),
+                                      child: Badge.count(
+                                        count: cartProvider.cartItems.length,
+                                        child: CircleAvatar(
+                                          backgroundColor: Colors.black38,
+                                          child: Icon(
+                                            Icons.shopping_cart,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : SizedBox();
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -143,10 +183,83 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Text(
+                          'Quantity:',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                productProvider.decrementProductQuantity();
+                              },
+                              child: CircleAvatar(
+                                radius: 16,
+                                backgroundColor:
+                                    productProvider.selectedProductQuantity == 1
+                                    ? Colors.grey.shade300
+                                    : CustomColors.primaryColor,
+                                child: Icon(Icons.remove, color: Colors.white),
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            Text(
+                              '${productProvider.selectedProductQuantity}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            GestureDetector(
+                              onTap: () {
+                                productProvider.incrementProductQuantity();
+                              },
+                              child: CircleAvatar(
+                                radius: 16,
+                                backgroundColor: CustomColors.primaryColor,
+                                child: Icon(Icons.add, color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ],
+          ),
+          bottomNavigationBar: Consumer<CartProvider>(
+            builder: (context, cartProvider, child) {
+              return SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SizedBox(
+                    height: 80,
+                    child: CustomButton(
+                      text: 'Add to Cart',
+                      onTap: () {
+                        cartProvider.addToCart(
+                          CartModel(
+                            product: product,
+                            quantity: productProvider.selectedProductQuantity,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         );
       },
