@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_abans/providers/cart_provider.dart';
+import 'package:my_abans/screens/payment_screen.dart';
 import 'package:my_abans/utils/custom_colors.dart';
+import 'package:my_abans/utils/navigation_manager.dart';
 import 'package:provider/provider.dart';
 
 class CartView extends StatefulWidget {
@@ -60,7 +62,9 @@ class _CartViewState extends State<CartView> {
                                 ),
                               ),
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  cartProvider.removeCartItem(index);
+                                },
                                 icon: Icon(Icons.delete, color: Colors.red),
                               ),
                             ],
@@ -72,11 +76,17 @@ class _CartViewState extends State<CartView> {
                               Row(
                                 children: [
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      cartProvider.decrementItemQuantity(
+                                        index,
+                                        context,
+                                      );
+                                    },
                                     child: CircleAvatar(
                                       radius: 14,
-                                      backgroundColor:
-                                          CustomColors.primaryColor,
+                                      backgroundColor: cartItem.quantity == 1
+                                          ? Colors.grey
+                                          : CustomColors.primaryColor,
                                       child: Icon(
                                         Icons.remove,
                                         size: 16,
@@ -94,7 +104,12 @@ class _CartViewState extends State<CartView> {
                                   ),
                                   SizedBox(width: 6),
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      cartProvider.incrementItemQuantity(
+                                        index,
+                                        context,
+                                      );
+                                    },
                                     child: CircleAvatar(
                                       radius: 14,
                                       backgroundColor:
@@ -123,6 +138,59 @@ class _CartViewState extends State<CartView> {
                     );
                   },
                 ),
+          bottomNavigationBar: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Total:',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "LKR ${cartProvider.cartItems.fold(0, (previousValue, element) => previousValue + element.product.price.toInt() * element.quantity)}",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: CustomColors.primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        NavigationManager.goTo(context, PaymentScreen());
+                      },
+
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors.primaryColor,
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        textStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text('Proceed to Checkout'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       },
     );

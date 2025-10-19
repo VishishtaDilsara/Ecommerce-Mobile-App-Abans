@@ -246,14 +246,36 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
                   child: SizedBox(
                     height: 80,
                     child: CustomButton(
-                      text: 'Add to Cart',
+                      text:
+                          cartProvider.getItemByProductId(product.id) != null &&
+                              cartProvider
+                                      .getItemByProductId(product.id)!
+                                      .quantity !=
+                                  productProvider.selectedProductQuantity
+                          ? 'Update Cart'
+                          : cartProvider.getItemByProductId(product.id) != null
+                          ? 'Remove From Cart'
+                          : 'Add to Cart',
                       onTap: () {
-                        cartProvider.addToCart(
-                          CartModel(
-                            product: product,
-                            quantity: productProvider.selectedProductQuantity,
-                          ),
-                        );
+                        if (cartProvider.getItemByProductId(product.id) !=
+                                null &&
+                            cartProvider
+                                    .getItemByProductId(product.id)!
+                                    .quantity ==
+                                productProvider.selectedProductQuantity) {
+                          cartProvider.removeCartItem(
+                            cartProvider.cartItems.indexWhere(
+                              (item) => item.product.id == product.id,
+                            ),
+                          );
+                        } else {
+                          cartProvider.addToCart(
+                            CartModel(
+                              product: product,
+                              quantity: productProvider.selectedProductQuantity,
+                            ),
+                          );
+                        }
                       },
                     ),
                   ),
